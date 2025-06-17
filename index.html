@@ -20,18 +20,24 @@ body{
 header{
   display:flex;
   flex-direction:column;
-  align-items:center;            /* همه عناصر هدر وسط */
+  align-items:center;
   margin-bottom:2rem;
 }
 .logo{
-  width:170px;                   /* اندازهٔ لوگو */
+  width:255px;                   /* 50٪ بزرگ‌تر */
   display:block;
   margin-bottom:1.2rem;
 }
 h1{
   font-size:clamp(1.4rem,4vw,2.2rem);
-  margin-top:1.2rem;             /* فاصلهٔ بالای تیتر از دکمه */
+  margin-top:1.2rem;
   text-align:center
+}
+/* خط تاریخ کوچک */
+#datetime{
+  font-size:.8rem;
+  margin-top:.4rem;
+  opacity:.85;
 }
 .btn-download{
   display:inline-block;
@@ -72,7 +78,7 @@ footer{margin-top:1.5rem;font-size:.75rem;opacity:.7;text-align:center}
 
 /* ——— موبایل ——— */
 @media(max-width:480px){
-  .logo{width:130px}
+  .logo{width:195px}             /* موبایل: 50٪ بزرگ‌تر از قبل */
   .config-text{font-size:.78rem}
   .copy-btn{padding:.3rem .6rem;font-size:.75rem}
 }
@@ -86,25 +92,29 @@ footer{margin-top:1.5rem;font-size:.75rem;opacity:.7;text-align:center}
 
   <!-- دکمهٔ دانلود زیر لوگو -->
   <a class="btn-download"
-     href="https://example.com/app-download"
+     href="https://v2rayng.2dust.link/v2rayNG_1.10.4_arm64-v8a.apk/app-download"
      target="_blank" rel="noopener">
     دانلود فیلترشکن
   </a>
 
-  <h1>آخرین کانفیگ‌های&nbsp;V2Ray</h1>
+  <h1>جدیدترین کانفیگ‌های&nbsp;V2Ray</h1>
+
+  <!-- تاریخ و ساعت شمسی -->
+  <div id="datetime">در حال به‌روزرسانی…</div>
 </header>
 
 <div id="box">
   <div id="loading">در حال بارگیری…</div>
 </div>
 
-<footer>به‌روزرسانی توسط <strong>IRAN.AZAD</strong></footer>
+<footer>به‌روزرسانی توسط <strong>© 2025 IRAN.AZAD</strong></footer>
 
 <script>
-const box=document.getElementById('box');
+/* ---------- بارگذاری کانفیگ‌ها ---------- */
 fetch('configs.txt')
   .then(r=>r.text())
   .then(text=>{
+    const box=document.getElementById('box');
     box.innerHTML='';
     const lines=text.trim().split(/\r?\n/).filter(Boolean);
     if(!lines.length){box.textContent='فایلی یافت نشد';return;}
@@ -122,7 +132,20 @@ fetch('configs.txt')
       item.append(span,btn);box.appendChild(item);
     });
   })
-  .catch(()=>box.textContent='خطا در بارگیری فایل');
+  .catch(()=>document.getElementById('box').textContent='خطا در بارگیری فایل');
+
+/* ---------- تاریخ و ساعت شمسی ---------- */
+function updateDateTime(){
+  const now = new Date();
+  const opts = { calendar:'persian', numberingSystem:'latn',
+                 hour:'2-digit', minute:'2-digit', second:'2-digit',
+                 weekday:'long', year:'numeric', month:'long', day:'numeric',
+                 timeZone:'Asia/Tehran' };
+  const fmt = new Intl.DateTimeFormat('fa-IR-u-ca-persian', opts).format(now);
+  document.getElementById('datetime').textContent = fmt;
+}
+updateDateTime();
+setInterval(updateDateTime, 30000);   // هر ۳۰ ثانیه
 </script>
 
 </body>
