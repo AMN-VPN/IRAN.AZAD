@@ -1,9 +1,65 @@
-<!doctype html><meta charset="utf-8">
-<title>V2Ray Configs</title>
-<h1>آخرین کانفیگ‌ها</h1>
-<pre id="cfg">در حال بارگیری…</pre>
+<!doctype html>
+<html lang="fa" dir="rtl">
+<meta charset="utf-8">
+<title>کانفیگ‌های V2Ray – IRAN.AZAD</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0;font-family:"Vazirmatn",sans-serif}
+  body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    color:#eee;
+    padding:2rem 1rem
+  }
+  header{text-align:center;margin-bottom:2rem}
+  h1{font-size:2rem;margin-bottom:.5rem}
+  .btn{
+    display:inline-block;
+    padding:.75rem 1.5rem;
+    margin-top:.75rem;
+    background:#00c9ff;
+    background:linear-gradient(90deg,#00c9ff 0%,#92fe9d 100%);
+    color:#04252e;
+    border:none;
+    border-radius:8px;
+    font-weight:700;
+    text-decoration:none;
+    transition:filter .2s;
+  }
+  .btn:hover{filter:brightness(1.1)}
+  #box{
+    background:#ffffff0d;
+    border:1px solid #ffffff1f;
+    border-radius:8px;
+    padding:1rem;
+    max-width:900px;
+    margin:0 auto;
+    overflow:auto;
+  }
+  pre{white-space:pre-wrap;direction:ltr;font-size:.85rem;line-height:1.4}
+  footer{margin-top:2rem;text-align:center;font-size:.75rem;opacity:.7}
+</style>
+
+<header>
+  <!--— لینک دانلود فیلترشکن —-->
+  <a class="btn" href="https://v2rayng.2dust.link/v2rayNG_1.10.4_arm64-v8a.apk" target="_blank" rel="noopener">
+    دانلود فیلترشکن
+  </a>
+  <h1>آخرین کانفیگ‌های V2Ray</h1>
+</header>
+
+<div id="box">
+  <pre id="cfg">در حال بارگیری…</pre>
+</div>
+
+<footer>
+  بروزشده به صورت دستی توسط <strong>IRAN.AZAD</strong>
+</footer>
+
 <script>
-  fetch('configs.txt')
-    .then(r => r.text())
-    .then(t => { document.getElementById('cfg').textContent = t });
+fetch('configs.txt')
+  .then(r => r.ok ? r.text() : 'خطا در بارگیری فایل')
+  .then(t => document.getElementById('cfg').textContent = t)
+  .catch(()=>document.getElementById('cfg').textContent='خطا در اتصال');
 </script>
+</html>
