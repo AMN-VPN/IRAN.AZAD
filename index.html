@@ -82,7 +82,7 @@ footer{margin-top:1.5rem;font-size:.75rem;opacity:.7;text-align:center}
 
 <header>
   <!-- لوگو با پس‌زمینهٔ شفاف -->
-  <img src="iran_azad_logo.png" alt="IRAN AZAD logo" class="logo">
+  <img src="logo.gif.gif" alt="IRAN AZAD logo" class="logo">
 
   <!-- دکمهٔ دانلود زیر لوگو -->
   <a class="btn-download"
@@ -102,4 +102,28 @@ footer{margin-top:1.5rem;font-size:.75rem;opacity:.7;text-align:center}
 
 <script>
 const box=document.getElementById('box');
-fetch('
+fetch('configs.txt')
+  .then(r=>r.text())
+  .then(text=>{
+    box.innerHTML='';
+    const lines=text.trim().split(/\r?\n/).filter(Boolean);
+    if(!lines.length){box.textContent='فایلی یافت نشد';return;}
+    lines.forEach(line=>{
+      const item=document.createElement('div');item.className='config-item';
+      const span=document.createElement('span');span.className='config-text';span.textContent=line;
+      const btn=document.createElement('button');btn.className='copy-btn';btn.textContent='Copy';
+      btn.onclick=()=>{
+        navigator.clipboard.writeText(line).then(()=>{
+          const prev=btn.textContent;
+          btn.textContent='Copied!';
+          setTimeout(()=>btn.textContent=prev,1500);
+        });
+      };
+      item.append(span,btn);box.appendChild(item);
+    });
+  })
+  .catch(()=>box.textContent='خطا در بارگیری فایل');
+</script>
+
+</body>
+</html>
