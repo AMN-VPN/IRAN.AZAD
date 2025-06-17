@@ -1,65 +1,106 @@
 <!doctype html>
 <html lang="fa" dir="rtl">
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>کانفیگ‌های V2Ray – IRAN.AZAD</title>
+
+<!-- فونت -->
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap');
-  *{box-sizing:border-box;margin:0;padding:0;font-family:"Vazirmatn",sans-serif}
-  body{
-    min-height:100vh;
-    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-    color:#eee;
-    padding:2rem 1rem
-  }
-  header{text-align:center;margin-bottom:2rem}
-  h1{font-size:2rem;margin-bottom:.5rem}
-  .btn{
-    display:inline-block;
-    padding:.75rem 1.5rem;
-    margin-top:.75rem;
-    background:#00c9ff;
-    background:linear-gradient(90deg,#00c9ff 0%,#92fe9d 100%);
-    color:#04252e;
-    border:none;
-    border-radius:8px;
-    font-weight:700;
-    text-decoration:none;
-    transition:filter .2s;
-  }
-  .btn:hover{filter:brightness(1.1)}
-  #box{
-    background:#ffffff0d;
-    border:1px solid #ffffff1f;
-    border-radius:8px;
-    padding:1rem;
-    max-width:900px;
-    margin:0 auto;
-    overflow:auto;
-  }
-  pre{white-space:pre-wrap;direction:ltr;font-size:.85rem;line-height:1.4}
-  footer{margin-top:2rem;text-align:center;font-size:.75rem;opacity:.7}
+*{box-sizing:border-box;margin:0;padding:0;font-family:"Vazirmatn",sans-serif}
+body{
+  min-height:100vh;
+  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+  color:#eee;
+  padding:2rem 1rem;
+  display:flex;flex-direction:column;align-items:center
+}
+h1{font-size:clamp(1.4rem,4vw,2.2rem);margin-bottom:1rem;text-align:center}
+.btn-download{
+  display:inline-block;
+  padding:.7rem 1.4rem;
+  margin-bottom:1.5rem;
+  background:linear-gradient(90deg,#00c9ff 0%,#92fe9d 100%);
+  color:#04252e;
+  border:none;border-radius:8px;font-weight:700;text-decoration:none;
+  transition:filter .2s
+}
+.btn-download:hover{filter:brightness(1.08)}
+#box{
+  background:#ffffff0d;
+  border:1px solid #ffffff22;
+  border-radius:12px;
+  width:100%;
+  max-width:900px;
+  padding:1rem;
+  overflow:auto
+}
+.config-item{
+  display:flex;gap:.5rem;
+  align-items:center;
+  background:#ffffff12;
+  border:1px solid #ffffff22;
+  border-radius:6px;
+  margin-bottom:.6rem;
+  padding:.5rem .75rem;
+  direction:ltr;
+  word-break:break-all;
+}
+.config-text{flex:1;font-size:.85rem;line-height:1.4}
+.copy-btn{
+  flex-shrink:0;
+  cursor:pointer;
+  padding:.4rem .8rem;
+  border:none;
+  border-radius:4px;
+  background:#00c9ff;
+  color:#04252e;
+  font-size:.8rem;
+  font-weight:700;
+  transition:filter .2s
+}
+.copy-btn:hover{filter:brightness(1.1)}
+footer{margin-top:1.5rem;font-size:.75rem;opacity:.7;text-align:center}
+@media(max-width:480px){
+  .config-text{font-size:.78rem}
+  .copy-btn{padding:.3rem .6rem;font-size:.75rem}
+}
 </style>
 
 <header>
-  <!--— لینک دانلود فیلترشکن —-->
-  <a class="btn" href="https://v2rayng.2dust.link/v2rayNG_1.10.4_arm64-v8a.apk" target="_blank" rel="noopener">
+  <a class="btn-download" href="https://example.com/app-download" target="_blank" rel="noopener">
     دانلود فیلترشکن
   </a>
-  <h1>آخرین کانفیگ‌های V2Ray</h1>
+  
+  <h1>آخرین کانفیگ‌های&nbsp;V2Ray</h1>
 </header>
 
 <div id="box">
-  <pre id="cfg">در حال بارگیری…</pre>
+  <div id="loading">در حال بارگیری…</div>
 </div>
 
-<footer>
-  بروزشده به صورت دستی توسط <strong>IRAN.AZAD</strong>
-</footer>
+<footer>به‌روزرسانی توسط <strong>IRAN.AZAD</strong></footer>
 
 <script>
-fetch('configs.txt')
-  .then(r => r.ok ? r.text() : 'خطا در بارگیری فایل')
-  .then(t => document.getElementById('cfg').textContent = t)
-  .catch(()=>document.getElementById('cfg').textContent='خطا در اتصال');
+const box=document.getElementById('box');
+fetch('configs.txt').then(r=>r.text()).then(text=>{
+  box.innerHTML='';             // پاک کردن «در حال بارگیری…»
+  const lines=text.trim().split(/\r?\n/).filter(Boolean);
+  if(!lines.length){box.textContent='فایلی یافت نشد';return;}
+  lines.forEach(line=>{
+    const item=document.createElement('div');item.className='config-item';
+    const span=document.createElement('span');span.className='config-text';span.textContent=line;
+    const btn=document.createElement('button');btn.className='copy-btn';btn.textContent='Copy';
+    btn.onclick=()=>{
+      navigator.clipboard.writeText(line).then(()=>{
+        const prev=btn.textContent;
+        btn.textContent='Copied!';
+        setTimeout(()=>btn.textContent=prev,1500);
+      });
+    };
+    item.append(span,btn);box.appendChild(item);
+  });
+}).catch(()=>box.textContent='خطا در بارگیری فایل');
 </script>
 </html>
