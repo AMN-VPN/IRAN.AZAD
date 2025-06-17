@@ -17,6 +17,10 @@ body{
   display:flex;flex-direction:column;align-items:center
 }
 h1{font-size:clamp(1.4rem,4vw,2.2rem);margin-bottom:1rem;text-align:center}
+.logo{
+  width:160px;           /* اندازهٔ لوگو؛ به دلخواه تغییر دهید */
+  margin-bottom:1.2rem;  /* فاصله از دکمه و تیتر */
+}
 .btn-download{
   display:inline-block;
   padding:.7rem 1.4rem;
@@ -37,40 +41,34 @@ h1{font-size:clamp(1.4rem,4vw,2.2rem);margin-bottom:1rem;text-align:center}
   overflow:auto
 }
 .config-item{
-  display:flex;gap:.5rem;
-  align-items:center;
-  background:#ffffff12;
-  border:1px solid #ffffff22;
-  border-radius:6px;
-  margin-bottom:.6rem;
-  padding:.5rem .75rem;
-  direction:ltr;
-  word-break:break-all;
+  display:flex;gap:.5rem;align-items:center;
+  background:#ffffff12;border:1px solid #ffffff22;
+  border-radius:6px;margin-bottom:.6rem;
+  padding:.5rem .75rem;direction:ltr;word-break:break-all;
 }
 .config-text{flex:1;font-size:.85rem;line-height:1.4}
 .copy-btn{
-  flex-shrink:0;
-  cursor:pointer;
-  padding:.4rem .8rem;
-  border:none;
-  border-radius:4px;
-  background:#00c9ff;
-  color:#04252e;
-  font-size:.8rem;
-  font-weight:700;
-  transition:filter .2s
+  flex-shrink:0;cursor:pointer;
+  padding:.4rem .8rem;border:none;border-radius:4px;
+  background:#00c9ff;color:#04252e;
+  font-size:.8rem;font-weight:700;transition:filter .2s
 }
 .copy-btn:hover{filter:brightness(1.1)}
 footer{margin-top:1.5rem;font-size:.75rem;opacity:.7;text-align:center}
 @media(max-width:480px){
+  .logo{width:120px}
   .config-text{font-size:.78rem}
   .copy-btn{padding:.3rem .6rem;font-size:.75rem}
 }
 </style>
 
 <header>
+  <!-- لوگو -->
+  <img src="logo.gif.gif" alt="IRAN AZAD logo" class="logo">
+
+  <!-- دکمهٔ دانلود و تیتر -->
   <a class="btn-download" href="https://example.com/app-download" target="_blank" rel="noopener">
- دانلود فیلترشکن
+    دانلود فیلترشکن
   </a>
   <h1>آخرین کانفیگ‌های&nbsp;V2Ray</h1>
 </header>
@@ -83,23 +81,26 @@ footer{margin-top:1.5rem;font-size:.75rem;opacity:.7;text-align:center}
 
 <script>
 const box=document.getElementById('box');
-fetch('configs.txt').then(r=>r.text()).then(text=>{
-  box.innerHTML='';             // پاک کردن «در حال بارگیری…»
-  const lines=text.trim().split(/\r?\n/).filter(Boolean);
-  if(!lines.length){box.textContent='فایلی یافت نشد';return;}
-  lines.forEach(line=>{
-    const item=document.createElement('div');item.className='config-item';
-    const span=document.createElement('span');span.className='config-text';span.textContent=line;
-    const btn=document.createElement('button');btn.className='copy-btn';btn.textContent='Copy';
-    btn.onclick=()=>{
-      navigator.clipboard.writeText(line).then(()=>{
-        const prev=btn.textContent;
-        btn.textContent='Copied!';
-        setTimeout(()=>btn.textContent=prev,1500);
-      });
-    };
-    item.append(span,btn);box.appendChild(item);
-  });
-}).catch(()=>box.textContent='خطا در بارگیری فایل');
+fetch('configs.txt')
+  .then(r=>r.text())
+  .then(text=>{
+    box.innerHTML='';
+    const lines=text.trim().split(/\r?\n/).filter(Boolean);
+    if(!lines.length){box.textContent='فایلی یافت نشد';return;}
+    lines.forEach(line=>{
+      const item=document.createElement('div');item.className='config-item';
+      const span=document.createElement('span');span.className='config-text';span.textContent=line;
+      const btn=document.createElement('button');btn.className='copy-btn';btn.textContent='Copy';
+      btn.onclick=()=>{
+        navigator.clipboard.writeText(line).then(()=>{
+          const prev=btn.textContent;
+          btn.textContent='Copied!';
+          setTimeout(()=>btn.textContent=prev,1500);
+        });
+      };
+      item.append(span,btn);box.appendChild(item);
+    });
+  })
+  .catch(()=>box.textContent='خطا در بارگیری فایل');
 </script>
 </html>
